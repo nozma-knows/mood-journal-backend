@@ -1,22 +1,17 @@
 import { createServer } from "http";
 import express from "express";
 import { ApolloServer, gql } from "apollo-server-express";
+import { readFileSync } from "fs";
+import { resolvers } from "./graph/resolvers";
+const { prisma } = require("./prisma/client");
+
+const typeDefs = readFileSync("./src/graph/schema.graphql", {
+  encoding: "utf-8",
+});
 
 const startServer = async () => {
   const app = express();
   const httpServer = createServer(app);
-
-  const typeDefs = gql`
-    type Query {
-      hello: String
-    }
-  `;
-
-  const resolvers = {
-    Query: {
-      hello: () => "Hello world!",
-    },
-  };
 
   const apolloServer = new ApolloServer({
     typeDefs,

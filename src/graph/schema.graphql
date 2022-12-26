@@ -1,0 +1,9 @@
+type Query {
+  entries: [Entry]
+}
+
+type Entry {
+  id: ID!
+  title: String
+  message: String!
+}
