@@ -1,9 +1,43 @@
-type Query {
-  entries: [Entry]
+enum EntryType {
+  VIDEO
+  AUDIO
+  TEXT
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  firstName: String
+  lastName: String
+  emai: String
+  phone: String?
+  role: Role
+  Entries: Entry[]
+  Profile: Profile?
+}
+
+type Profile {
+  id: ID!
+  bio: String
+  user: User
 }
 
 type Entry {
   id: ID!
   title: String
   message: String!
+  author: User
+}
+
+type Query {
+  entries: [Entry]
 }
