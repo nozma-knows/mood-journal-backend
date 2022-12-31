@@ -3,23 +3,43 @@ import {
   CreateLoginInput,
 } from "./../../__generated__/resolvers-types";
 const { prisma } = require("../../prisma/client");
-import { User } from "@prisma/client";
 const bcrypt = require("bcrypt");
 
 export const loginMutationResolvers: LoginResolvers = {
+  // Create Login Mutation Resolver
   createLogin: async (parent: any, args: { input: CreateLoginInput }) => {
+    // Grab args
     const { firstName, lastName, email, password } = args.input;
-    // HANDLE ERROR PARSING INPUTS
+
+    // Grab args error handling
+    if (!firstName || !lastName || !email || !password) {
+      throw new Error("Required parameter is missing.");
+    }
+
+    // Create user
     const user = await prisma.user.create({
       data: {
         firstName,
         lastName,
         email,
+        emailVerified: false,
       },
     });
-    // HANDLE ERROR CREATING USER
+
+    // Create user error handling
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    // HANDLE ERROR HASHING PASSWORD
+
+    // Hash password error handling
+    if (!hashedPassword) {
+      throw new Error("Error hashing password.");
+    }
+
+    // Create login
     const login = await prisma.login.create({
       data: {
         email,
@@ -27,7 +47,13 @@ export const loginMutationResolvers: LoginResolvers = {
         userId: user.id,
       },
     });
-    // HANDLE ERROR CREATING LOGIN
+
+    // Create login error handling
+    if (!login) {
+      throw new Error("Error creating login.");
+    }
+
+    // return login
     return login;
   },
 };

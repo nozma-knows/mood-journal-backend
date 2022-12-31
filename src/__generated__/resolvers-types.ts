@@ -77,6 +77,7 @@ export type Session = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
+  emailVerified: Scalars['Boolean'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
@@ -209,6 +210,7 @@ export type SessionResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  emailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
