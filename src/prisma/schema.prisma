@@ -1,5 +1,73 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// // This is your Prisma schema file,
+// // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model User {
+//   id        Int          @id @default(autoincrement())
+//   createdAt DateTime     @default(now())
+//   updatedAt DateTime     @updatedAt
+//   roles     Role[]
+//   profile   UserProfile?
+//   entries   Entry[]
+//   logins    Login[]
+//   signup    Signup?
+// }
+
+// model UserProfile {
+//   id        Int     @id @default(autoincrement())
+//   firstName String
+//   lastName  String
+//   email     String  @unique
+//   password  String
+//   phone     String?
+//   user      User    @relation(fields: [userId], references: [id])
+//   userId    Int     @unique
+// }
+
+// model Entry {
+//   id        Int       @id @default(autoincrement())
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   title     String?
+//   content   String
+//   type      EntryType @default(TEXT)
+//   author    User      @relation(fields: [authorId], references: [id])
+//   authorId  Int       @unique
+// }
+
+// model Login {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    Int      @unique
+//   token     String   @unique
+// }
+
+// model Signup {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    Int      @unique
+// }
+
+// enum EntryType {
+//   VIDEO
+//   AUDIO
+//   TEXT
+// }
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
 
 generator client {
   provider = "prisma-client-js"
@@ -11,44 +79,31 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  firstName String
-  lastName  String
-  email     String   @unique
-  password  String
-  phone     String?
-  role      Role
-  Entries   Entry[]
-  Profile   Profile?
-}
-
-model Profile {
-  id     Int    @id @default(autoincrement())
-  bio    String
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
-}
-
-model Entry {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  title     String?
-  message   String
-  type      EntryType @default(TEXT)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int       @default(0)
+  firstName String
+  lastName  String
+  email     String    @unique
+  login     Login?
+  sessions  Session[]
 }
 
-enum EntryType {
-  VIDEO
-  AUDIO
-  TEXT
+model Login {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+  email          String   @unique
+  hashedPassword String
+  user           User     @relation(fields: [userId], references: [id])
+  userId         Int      @unique
 }
 
-enum Role {
-  USER
-  ADMIN
+model Session {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  token     String   @unique
+  expiry    DateTime
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?     @unique
 }

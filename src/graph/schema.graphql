@@ -1,43 +1,126 @@
-enum EntryType {
-  VIDEO
-  AUDIO
-  TEXT
-}
+# enum EntryType {
+#   VIDEO
+#   AUDIO
+#   TEXT
+# }
 
-enum Role {
-  USER
-  ADMIN
-}
+# enum Role {
+#   USER
+#   ADMIN
+# }
 
-type AuthPayload {
-  token: String
-  user: User
+# type Login {
+#   token: String
+#   user: User
+# }
+
+# type User {
+#   id: ID!
+#   roles: [Role]
+#   profile: Profile
+#   entries: [Entry]
+# }
+
+# type Details {
+#   id: ID!
+# }
+
+# type Data {
+#   id: ID!
+#   Entries: [Entry]!
+# }
+
+# type Profile {
+#   id: ID!
+#   firstName: String!
+#   lastName: String!
+#   email: String!
+#   phone: String
+#   user: User!
+# }
+
+# type Entry {
+#   id: ID!
+#   createdAt: String!
+#   updatedAt: String!
+#   title: String
+#   content: String
+#   type: EntryType
+#   author: User!
+# }
+
+# type Login {
+#   id: ID!
+#   createdAt: String!
+#   user: User!
+# }
+
+# input CreateLoginInput {
+#   firstName: String!
+#   lastName: String!
+#   email: String!
+#   password: String!
+#   passwordConfirmation: String!
+# }
+
+# type Signup {
+#   id: ID!
+#   createdAt: String!
+#   user: User!
+# }
+
+# type Query {
+#   entries: [Entry]
+#   users: [User]
+# }
+
+# type Mutation {
+#   createLogin(input: CreateLoginInput!):
+# }
+
+type Login {
+  id: ID!
+  user: User!
+  email: String!
 }
 
 type User {
   id: ID!
-  firstName: String
-  lastName: String
-  emai: String
-  phone: String?
-  role: Role
-  Entries: Entry[]
-  Profile: Profile?
+  firstName: String!
+  lastName: String!
+  email: String!
 }
 
-type Profile {
+type Session {
   id: ID!
-  bio: String
-  user: User
+  token: String!
+  expiry: Float!
+  user: User!
 }
 
-type Entry {
-  id: ID!
-  title: String
-  message: String!
-  author: User
+input CreateLoginInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input LogoutInput {
+  sessionId: String!
 }
 
 type Query {
-  entries: [Entry]
+  users: [User]
+}
+
+type Mutation {
+  createLogin(input: CreateLoginInput!): Login!
+  login(input: LoginInput!): Session!
+  logout(input: LogoutInput!): Session!
 }
